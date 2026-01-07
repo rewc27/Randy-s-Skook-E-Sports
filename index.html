@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purdue Football 2031 Season</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #CEB888 0%, #9d8554 100%);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #000000;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #CEB888;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #CEB888;
+        }
+
+        .record {
+            font-size: 1.5em;
+            text-align: center;
+            padding: 20px;
+            background: rgba(206, 184, 136, 0.2);
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .schedule-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #CEB888;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .game-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(206, 184, 136, 0.3);
+        }
+
+        .game-card.win {
+            border-left-color: #4CAF50;
+        }
+
+        .game-card.loss {
+            border-left-color: #f44336;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .week {
+            font-weight: bold;
+            color: #CEB888;
+        }
+
+        .opponent {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .score {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .win-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .win-indicator.win {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .win-indicator.loss {
+            background: #f44336;
+            color: white;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .stats-table thead {
+            background: rgba(206, 184, 136, 0.3);
+        }
+
+        .stats-table th {
+            padding: 15px 10px;
+            text-align: left;
+            color: #CEB888;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            background: rgba(206, 184, 136, 0.3);
+        }
+
+        .stats-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .stats-table tbody tr:hover {
+            background: rgba(206, 184, 136, 0.1);
+        }
+
+        .position-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: rgba(206, 184, 136, 0.3);
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(206, 184, 136, 0.2);
+            border: 2px solid #CEB888;
+            color: #CEB888;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #CEB888;
+            color: #000000;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .stats-table {
+                font-size: 0.85em;
+            }
+
+            .stats-table th,
+            .stats-table td {
+                padding: 8px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏈 PURDUE BOILERMAKERS</h1>
+            <div class="subtitle">2031 Season Summary</div>
+        </header>
+
+        <div class="section">
+            <h2>Season Record</h2>
+            <div class="record" id="record">Loading...</div>
+        </div>
+
+        <div class="section">
+            <h2>Schedule & Results</h2>
+            <div class="schedule-grid" id="schedule">Loading...</div>
+        </div>
+
+        <div class="section">
+            <h2>Player Statistics</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterPlayers('ALL')">All Players</button>
+                <button class="filter-btn" onclick="filterPlayers('QB')">Quarterbacks</button>
+                <button class="filter-btn" onclick="filterPlayers('HB')">Running Backs</button>
+                <button class="filter-btn" onclick="filterPlayers('WR')">Receivers</button>
+                <button class="filter-btn" onclick="filterPlayers('DEF')">Defense</button>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Pos</th>
+                            <th>Year</th>
+                            <th>GP</th>
+                            <th>GS</th>
+                            <th>Pass Yds</th>
+                            <th>Pass TD</th>
+                            <th>Rush Yds</th>
+                            <th>Rush TD</th>
+                            <th>Rec</th>
+                            <th>Rec Yds</th>
+                            <th>Rec TD</th>
+                            <th>Tackles</th>
+                            <th>Sacks</th>
+                            <th>INT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playerStats">
+                        <tr><td colspan="15">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const seasonData = {
+            "schedule": [
+                {"week": 1, "team": "PUR", "site": "Home", "opponent": "USA", "opp_rank": "", "points": 51, "points_against": 0, "result": "W"},
+                {"week": 2, "team": "PUR", "site": "Away", "opponent": "CCU", "opp_rank": "", "points": 42, "points_against": 10, "result": "W"},
+                {"week": 3, "team": "PUR", "site": "Home", "opponent": "ND", "opp_rank": 6, "points": 34, "points_against": 10, "result": "W"},
+                {"week": 4, "team": "PUR", "site": "Home", "opponent": "BGSU", "opp_rank": "", "points": 41, "points_against": 21, "result": "W"},
+                {"week": 5, "team": "PUR", "site": "Away", "opponent": "IOWA", "opp_rank": "", "points": 37, "points_against": 17, "result": "W"},
+                {"week": 6, "team": "PUR", "site": "Home", "opponent": "ILL", "opp_rank": "", "points": 27, "points_against": 30, "result": "L"},
+                {"week": 7, "team": "PUR", "site": "Home", "opponent": "MSU", "opp_rank": "", "points": 24, "points_against": 21, "result": "W"},
+                {"week": 8, "team": "PUR", "site": "Away", "opponent": "NEB", "opp_rank": "", "points": 38, "points_against": 7, "result": "W"},
+                {"week": 9, "team": "PUR", "site": "Home", "opponent": "PSU", "opp_rank": 3, "points": 27, "points_against": 24, "result": "W"},
+                {"week": 10, "team": "PUR", "site": "Away", "opponent": "OSU", "opp_rank": 1, "points": 17, "points_against": 35, "result": "L"},
+                {"week": 11, "team": "PUR", "site": "Away", "opponent": "UW", "opp_rank": "", "points": 31, "points_against": 28, "result": "W"},
+                {"week": 12, "team": "PUR", "site": "Home", "opponent": "IU", "opp_rank": 20, "points": 27, "points_against": 21, "result": "W"}
+            ],
+            "players": [
+                {"name": "Marquise Avant", "position": "QB", "year": "Fr", "games_played": 12, "games_started": 8, "passing_yards": 1830, "passing_tds": 18, "rushing_yards": 0, "rushing_tds": 0, "receptions": 0, "receiving_yards": 0, "receiving_tds": 0, "tackles": 0, "sacks": 0, "interceptions": 0},
+                {"name": "Diondre Cleeland", "position": "QB", "year": "RS Jr", "games_played": 10, "games_started": 4, "passing_yards": 866, "passing_tds": 5, "rushing_yards": 0, "rushing_tds": 0, "receptions": 0, "receiving_yards": 0, "receiving_tds": 0, "tackles": 0, "sacks": 0, "interceptions": 0},
+                {"name": "Diego Capers", "position": "HB", "year": "Fr", "games_played": 13, "games_started": 12, "passing_yards": 0, "passing_tds": 0, "rushing_yards": 911, "rushing_tds": 3, "receptions": 0, "receiving_yards": 0, "receiving_tds": 0, "tackles": 0, "sacks": 0, "interceptions": 0},
+                {"name": "Bobby Carmona", "position": "HB", "year": "Sr", "games_played": 6, "games_started": 0, "passing_yards": 0, "passing_tds": 0, "rushing_yards": 269, "rushing_tds": 2, "receptions": 4, "receiving_yards": 68, "receiving_tds": 0, "tackles": 0, "sacks": 0, "interceptions": 0},
+                {"name": "Tobi Okoro", "position": "HB", "year": "RS Fr", "games_played": 13, "games_started": 0, "passing_yards": 0, "passing_tds": 0, "rushing_yards": 504, "rushing_tds": 8, "receptions": 10, "receiving_yards": 178, "receiving_tds": 0, "tackles": 0, "sacks": 0, "interceptions": 0},
+                {"name": "MIke Bausby", "position": "HB", "year": "RS Fr", "games_played": 12, "games_started": 0, "passing_yards": 0, "passing_tds": 0, "rushing_yards": 309, "rushing_tds": 3, "receptions": 0, "receiving_yards": 0, "receiving_tds": 0, "tackles": 0, "sacks": 0, "interceptions": 0},
+                {"name": "Deionte Glennon", "position": "WR", "year": "RS Sr", "games_played": 13, "games_started": 13, "passing_yards": 0, "passing_tds": 0, "rushing_yards": 0, "rushing_tds": 0, "receptions": 53, "receiving_yards": 495, "receiving_tds": 2, "tackles": 0, "sacks": 0, "interceptions": 0},
+                {"name": "Keegan Rooks", "position": "WR", "year": "RS Sr", "games_played": 13, "games_started": 13, "passing_yards": 0, "passing_tds": 0, "rushing_yards": 0, "rushing_tds": 0, "receptions": 57, "receiving_yards": 718, "receiving_tds": 7, "tackles": 0, "sacks": 0, "interceptions": 0},
+                {"name": "Leo Cheeks", "position": "WR", "year": "RS Jr", "games_played": 13, "games_started": 12, "passing_yards": 0, "passing_tds": 0, "rushing_yards": 0, "rushing_tds": 0, "receptions": 46, "receiving_yards": 625, "receiving_tds": 9, "tackles": 0, "sacks": 0, "interceptions": 0}
+            ]
+        };
+
+        let allPlayers = seasonData.players;
+
+        // Calculate and display record
+        function displayRecord() {
+            const wins = seasonData.schedule.filter(g => g.result === 'W').length;
+            const losses = seasonData.schedule.filter(g => g.result === 'L').length;
+            document.getElementById('record').innerHTML = `
+                <strong>${wins}-${losses}</strong> Overall
+            `;
+        }
+
+        // Display schedule
+        function displaySchedule() {
+            const scheduleHTML = seasonData.schedule.map(game => `
+                <div class="game-card ${game.result.toLowerCase()}">
+                    <div class="game-header">
+                        <span class="week">Week ${game.week}</span>
+                        <span class="win-indicator ${game.result.toLowerCase()}">${game.result}</span>
+                    </div>
+                    <div class="opponent">
+                        ${game.site === 'Home' ? 'vs' : '@'} ${game.opponent}
+                        ${game.opp_rank ? ` (#${game.opp_rank})` : ''}
+                    </div>
+                    <div class="score">
+                        ${game.points} - ${game.points_against}
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('schedule').innerHTML = scheduleHTML;
+        }
+
+        // Display player stats
+        function displayPlayers(players) {
+            const playersHTML = players.map(p => `
+                <tr data-position="${p.position}">
+                    <td><strong>${p.name}</strong></td>
+                    <td><span class="position-badge">${p.position}</span></td>
+                    <td>${p.year || '-'}</td>
+                    <td>${p.games_played || 0}</td>
+                    <td>${p.games_started || 0}</td>
+                    <td>${p.passing_yards || '-'}</td>
+                    <td>${p.passing_tds || '-'}</td>
+                    <td>${p.rushing_yards || '-'}</td>
+                    <td>${p.rushing_tds || '-'}</td>
+                    <td>${p.receptions || '-'}</td>
+                    <td>${p.receiving_yards || '-'}</td>
+                    <td>${p.receiving_tds || '-'}</td>
+                    <td>${p.tackles || '-'}</td>
+                    <td>${p.sacks || '-'}</td>
+                    <td>${p.interceptions || '-'}</td>
+                </tr>
+            `).join('');
+            document.getElementById('playerStats').innerHTML = playersHTML || '<tr><td colspan="15">No players found</td></tr>';
+        }
+
+        // Filter players by position
+        function filterPlayers(position) {
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filter players
+            let filtered;
+            if (position === 'ALL') {
+                filtered = allPlayers;
+            } else if (position === 'DEF') {
+                filtered = allPlayers.filter(p => 
+                    !['QB', 'HB', 'WR', 'TE', 'OL'].includes(p.position)
+                );
+            } else {
+                filtered = allPlayers.filter(p => p.position === position);
+            }
+            displayPlayers(filtered);
+        }
+
+        // Initialize
+        displayRecord();
+        displaySchedule();
+        displayPlayers(allPlayers);
+    </script>
+</body>
+</html>
